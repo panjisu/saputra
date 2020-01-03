@@ -1,0 +1,182 @@
+#include<iostream>
+#include<fstream>
+#include<string.h>
+#include<conio.h>
+#include<time.h>
+using namespace std;
+
+time_t now=time(0);
+char* x=ctime(&now);
+
+struct nasabah{
+	int norek,pass,tarik,nork,tf,setor;
+	long int saldo=1000000;
+};
+
+ifstream fi;
+ofstream fo;
+nasabah atm;
+
+void tarik(){
+	cout<<"Masukan jumlah penarikan : Rp. ";cin>>atm.tarik;
+	if(atm.saldo<atm.tarik){
+		cout<<"Saldo Anda tidak mencukupi\n";
+	} else if(atm.saldo>=atm.tarik){
+		cout<<"Penarikan BERHASIL\n";
+		atm.saldo-=atm.tarik;
+		cout<<"Saldo Anda sekarang Rp. "<<atm.saldo;
+		fo.open("tarik.txt");
+		fo<<x;
+		fo<<"\nPenarikan Tunai Rp. "<<atm.tarik;
+		fo<<"\nSaldo Anda sekarang Rp. "<<atm.saldo;
+		fo.close();
+	}
+}
+
+void transfer(){
+	cout<<"Masukan No.Rekening Tujuan : ";cin>>atm.nork;
+	cout<<"Masukan Jumalah Nominal    : ";cin>>atm.tf;
+		if(atm.saldo<atm.tf){
+		cout<<"Saldo Anda tidak mencukupi\n";
+	} else if(atm.saldo>=atm.tf){
+   cout<<"Transfer BERHASIL\n";
+		atm.saldo-=atm.tf;
+	cout<<"Saldo Anda sekarang Rp. "<<atm.saldo;
+		fo.open("transfer.txt");
+		fo<<x;
+		fo<<"\nTransfer BERHASIL \nSejumlah Rp. "<<atm.tf<<" No.Rekening tujuan "<<atm.nork;
+		fo<<"\nSaldo Anda sekarang Rp. "<<atm.saldo;
+		fo.close();	
+	}
+}
+
+void setor(){
+	cout<<"Masukan Jumalah Nominal    : ";cin>>atm.setor;
+	cout<<"Setoran BERHASIL\n";
+		atm.saldo+=atm.setor;
+	cout<<"Saldo Anda sekarang Rp. "<<atm.saldo;
+		fo.open("setor.txt");
+		fo<<x;
+		fo<<"\nSetoran BERHASIL \nSejumlah Rp. "<<atm.setor;
+		fo<<"\nSaldo Anda sekarang Rp. "<<atm.saldo;
+		fo.close();
+}
+
+void info(){
+	cout<<"Saldo Anda sekarang Rp. "<<atm.saldo;
+		fo.open("info.txt");
+		fo<<x;
+		fo<<"\nSaldo Awal Rp. 1000.000";
+		fo<<"\nSaldo Anda sekarang Rp. "<<atm.saldo;
+		fo.close();
+}
+
+int main(){
+	int pilih;
+  int i;
+	int lagi; 
+   system("color B");
+   cout << "\t------------------------------------------------------\n";
+   cout << "\t\t\tSelamat Datang Di ATM \n";  
+   cout << "\t------------------------------------------------------\n\n";
+   int login=0;
+   i = 1;
+   do {
+       cout << "Nomer Rekening : "; cin >>atm.norek;
+       cout << "Password       : "; cin >>atm.pass;
+       if (atm.norek==1234 && atm.pass==1111){
+           fo.open("norek.txt");
+           fo<<atm.norek;
+           fo.close();
+           
+           fo.open("password.txt");
+           fo<<atm.pass;
+           fo.close();
+           
+           i=4;
+           login=1;
+           goto menu;
+  }
+       else {
+           cout<<"\nNomer Rekening atau PIN anda salah\n";
+					 cout<<"Ulangi lagi\n\n";          
+           i = i +1;
+       }
+    }while (i <= 3);
+    if(login != 1){
+       cout<<"\nAnda Telah 3x Memasukan NOMER REKENING & PASSWORD Yang Salah\n";
+       cout << "Mohon Maaf Akun Anda Kami Blockir Untuk Sementara\n";
+    }
+    
+    menu:
+	system("cls");
+	system("color B");
+	cout<<"\t\t===================================================\n"; 
+	cout<<"\t\t  MENU TRANSAKSI\n";
+	cout<<"\t\t===================================================\n\n";
+	cout<<"\t\t 1. Tarik Tunai\n";
+	cout<<"\t\t 2. Transfer\n";
+	cout<<"\t\t 3. Setor Tunai\n";
+	cout<<"\t\t 4. Info Saldo\n";
+	cout<<"\t\t 5. Keluar\n\n";
+	cout<<"\t\t===================================================\n\n";
+	cout<<"  Pilih Menu : ";cin>>pilih;
+	
+	switch (pilih){
+		case 1:
+			tarik();
+			cout<< "\n\nLanjut Transaksi tekan angka 0, Jika TIDAK tekan sembarang ! : ";cin>>lagi;
+        if (lagi==0) {
+        	system("cls");
+        goto menu;}
+        else {
+        	system("cls");
+        goto keluar;
+}
+
+        break;
+    case 2:
+			transfer();
+			cout<< "\n\nLanjut Transaksi tekan angka 0, Jika TIDAK tekan sembarang ! : ";cin>>lagi;
+        if (lagi == 0) {
+        	system("cls");
+        goto menu;}
+        else {
+        	system("cls");
+        goto keluar;
+}
+ 				
+        break;
+		case 3:
+		setor();
+		cout<< "\n\nLanjut Transaksi tekan angka 0, Jika TIDAK tekan sembarang ! : ";cin>>lagi;
+        if (lagi == 0) {
+        	system("cls");
+        goto menu;}
+        else {
+        	system("cls");
+        goto keluar;
+}
+        break;
+		case 4:
+		info();
+		cout<< "\n\nLanjut Transaksi tekan angka 0, Jika TIDAK tekan sembarang ! : ";cin>>lagi;
+        if (lagi == 0) {
+        system("cls");	
+        goto menu;}
+        else {
+        	system("cls");
+        goto keluar;
+}
+        break;		
+		case 5:
+		keluar:
+         system("cls");
+         cout<< "\n TERIMAKASIH SUDAH BERTRANSAKSI\n";
+  break;
+  default:
+         cout<< "Maaf input yang anda masukkan salah, coba lagi \n\n";
+   goto menu;
+   break;
+}				    
+}
